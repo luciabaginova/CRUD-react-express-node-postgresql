@@ -78,6 +78,7 @@ const App = () => {
       .then(response => console.log(response))
 
     setCurrentUser(initialFormState)
+    setEditing(false)
   }
 
 
