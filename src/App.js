@@ -1,18 +1,18 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 
 const App = () => {
 
   const [users, setUsers] = useState([])
 
   useEffect(() => {
-    const fetchUsers = async() => {
+    const fetchUsers = async () => {
       const result = await fetch(`http://localhost:8080/users`);
       result
-      .json()
-      .then(result => setUsers(result))
-      .catch(e => console.log(e))
+        .json()
+        .then(result => setUsers(result))
+        .catch(e => console.log(e))
     }
-    
+
     fetchUsers()
 
   }, [])
@@ -33,14 +33,16 @@ const App = () => {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Jane Doe</td>
-            <td>janedoe@gmail.com</td>
-            <td>
-              <button className="button" >Edit</button>
-              <button style={{ marginLeft: 5 }} className="button" >Delete</button>
-            </td>
-          </tr>
+          {users.map(item =>
+            <tr key={item.id}>
+              <td>{item.name}</td>
+              <td>{item.email}</td>
+              <td>
+                <button className="button" >Edit</button>
+                <button style={{ marginLeft: 5 }} className="button" >Delete</button>
+              </td>
+            </tr>
+          )}
         </tbody>
       </table>
 
