@@ -1,10 +1,28 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 
 const App = () => {
+
+  const [users, setUsers] = useState([])
+
+  useEffect(() => {
+    const fetchUsers = async() => {
+      const result = await fetch(`http://localhost:8080/users`);
+      result
+      .json()
+      .then(result => setUsers(result))
+      .catch(e => console.log(e))
+    }
+    
+    fetchUsers()
+
+  }, [])
+
+  console.log(users)
+
   return (
     <div className="container">
       <h1>React, Express, Node, Postgresql</h1>
-      <p1>A simple app to create, react, update and delete data</p1>
+      <h5>A simple app to create, read, update and delete data</h5>
 
       <table>
         <thead>
