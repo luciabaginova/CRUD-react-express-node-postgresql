@@ -30,6 +30,19 @@ const App = () => {
     setCurrentUser({ ...currentUser, [id]: value })
   }
 
+  const submitNewUser = event => {
+    event.preventDefault()
+
+    fetch('http://localhost:8080/users', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(currentUser),
+    })
+    .then(response => console.log(response))
+  }
+
   return (
     <div className="container">
       <h1>React, Express, Node, Postgresql</h1>
@@ -38,7 +51,7 @@ const App = () => {
       <div className="flex-row">
 
         <div className="flex-large">
-          <form>
+          <form onSubmit={submitNewUser}>
             <label>Name</label>
             <input
               type="text"
