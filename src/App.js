@@ -40,6 +40,8 @@ const App = () => {
       body: JSON.stringify(currentUser),
     })
     .then(response => console.log(response))
+    
+    setCurrentUser(initialFormState)
   }
 
   const deleteUser = async (item) => {
