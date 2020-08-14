@@ -24,7 +24,6 @@ const App = () => {
 
   }, [users])
 
-
   const handleInputChange = event => {
     const { id, value } = event.target
     setCurrentUser({ ...currentUser, [id]: value })
@@ -42,6 +41,21 @@ const App = () => {
     })
     .then(response => console.log(response))
   }
+
+  const deleteUser = async (item) => {
+
+    const response = await fetch(`http://localhost:8080/users/${item.id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    response
+    .json()
+    .then(result => setUsers(result))
+    .catch(e => console.log(e))
+  }
+
 
   return (
     <div className="container">
@@ -88,7 +102,7 @@ const App = () => {
                   <td>{item.email}</td>
                   <td>
                     <button className="button" >Edit</button>
-                    <button style={{ marginLeft: 5 }} className="button" >Delete</button>
+                    <button onClick={() => deleteUser(item)} style={{ marginLeft: 5 }} className="button" >Delete</button>
                   </td>
                 </tr>
               )}
