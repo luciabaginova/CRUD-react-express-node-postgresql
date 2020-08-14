@@ -22,7 +22,7 @@ const App = () => {
 
     fetchUsers()
 
-  }, [])
+  }, [users])
 
 
   const handleInputChange = event => {
@@ -32,7 +32,6 @@ const App = () => {
 
   const submitNewUser = event => {
     event.preventDefault()
-
     fetch('http://localhost:8080/users', {
       method: 'POST',
       headers: {
