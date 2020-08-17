@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+// import NewUserForm from './Components/NewUserForm';
 
 const App = () => {
 
@@ -13,40 +14,42 @@ const App = () => {
   const [editing, setEditing] = useState(false)
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      const result = await fetch(`http://localhost:8080/users`);
-      result
-        .json()
-        .then(result => setUsers(result))
-        .catch(e => console.log(e))
-    }
+    fetchUsers();
+  }, [])
 
-    fetchUsers()
-
-  }, [users])
+  const fetchUsers = async () => {
+    const result = await fetch(`http://localhost:8080/users`)
+    result
+      .json()
+      .then(result => setUsers(result))
+      .catch(e => console.log(e))
+  }
 
   const handleInputChange = event => {
     const { id, value } = event.target
     setCurrentUser({ ...currentUser, [id]: value })
   }
 
-  const submitNewUser = event => {
+  const submitNewUser = async (event) => {
     event.preventDefault()
 
-    fetch('http://localhost:8080/users', {
+    const response = await fetch('http://localhost:8080/users', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(currentUser),
     })
-      .then(response => console.log(response))
+    response
+      .json()
+      .then(result => setUsers(result))
+      .catch(e => console.log(e))
 
+    fetchUsers()
     setCurrentUser(initialFormState)
   }
 
   const deleteUser = async (item) => {
-
     const response = await fetch(`http://localhost:8080/users/${item.id}`, {
       method: 'DELETE',
       headers: {
@@ -55,30 +58,35 @@ const App = () => {
     })
     response
       .json()
-      .then(result => setUsers(result))
+      .then(result => setUsers(result), fetchUsers())
       .catch(e => console.log(e))
   }
 
   const editUser = item => {
     console.log(item)
     setEditing(true)
-    setCurrentUser({id: item.id, name: item.name, email: item.email})
+    setCurrentUser({ id: item.id, name: item.name, email: item.email })
   }
 
-  const submitUserEdit = event => {
+  const submitUserEdit = async (event) => {
     event.preventDefault()
 
-    fetch(`http://localhost:8080/users/${currentUser.id}`, {
+    const response = await fetch(`http://localhost:8080/users/${currentUser.id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(currentUser),
     })
-      .then(response => console.log(response))
+    response
+      .json()
+      .then(result => setUsers(result))
+      .catch(e => console.log(e))
 
+    fetchUsers()
     setCurrentUser(initialFormState)
     setEditing(false)
+
   }
 
 
@@ -113,6 +121,7 @@ const App = () => {
           </div>
           :
           <div className="flex-large">
+            {/* <NewUserForm handleInputChange={handleInputChange} submitNewUser={submitNewUser} currentUser={currentUser} /> */}
             <form onSubmit={submitNewUser}>
               <label>Name</label>
               <input
