@@ -92,7 +92,7 @@ const App = () => {
 
   return (
     <div className="container">
-      <h1>React, Express, Node, Postgresql</h1>
+      <h1>React, Express, Node, PostgreSQL</h1>
       <h5>A simple app to create, read, update and delete data</h5>
 
       <div className="flex-row">
@@ -129,15 +129,14 @@ const App = () => {
                   <td>{item.name}</td>
                   <td>{item.email}</td>
                   <td>
-                    <button onClick={() => editUser(item)} className="button" >Edit</button>
-                    <button onClick={() => deleteUser(item)} style={{ marginLeft: 5 }} className="button" >Delete</button>
+                    <button onClick={() => editUser(item)} className="muted-button" >Edit</button>
+                    <button onClick={() => deleteUser(item)} style={{ marginLeft: 5 }} className="muted-button" >Delete</button>
                   </td>
                 </tr>
               )}
             </tbody>
           </table>
         </div>
-
       </div>
     </div>
   );
