@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-// import NewUserForm from './Components/NewUserForm';
+import NewUserForm from './Components/NewUserForm';
 
 const App = () => {
 
@@ -89,7 +89,6 @@ const App = () => {
 
   }
 
-
   return (
     <div className="container">
       <h1>React, Express, Node, Postgresql</h1>
@@ -121,26 +120,11 @@ const App = () => {
           </div>
           :
           <div className="flex-large">
-            {/* <NewUserForm handleInputChange={handleInputChange} submitNewUser={submitNewUser} currentUser={currentUser} /> */}
-            <form onSubmit={submitNewUser}>
-              <label>Name</label>
-              <input
-                type="text"
-                id="name"
-                placeholder="Jane Doe"
-                onChange={handleInputChange}
-                value={currentUser.name}
-              />
-              <label>Email</label>
-              <input
-                type="text"
-                id="email"
-                placeholder="jane.doe@gmail.com"
-                onChange={handleInputChange}
-                value={currentUser.email}
-              />
-              <input type="submit" value="Submit" />
-            </form>
+            <NewUserForm
+              submitNewUser={submitNewUser}
+              handleInputChange={handleInputChange}
+              currentUser={currentUser}
+            />
           </div>
         }
 
