@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import NewUserForm from './Components/NewUserForm';
+import EditUserForm from './Components/EditUserForm';
 
 const App = () => {
 
@@ -95,28 +96,13 @@ const App = () => {
       <h5>A simple app to create, read, update and delete data</h5>
 
       <div className="flex-row">
-
         {editing ?
           <div className="flex-large">
-            <form onSubmit={submitUserEdit}>
-              <label>Name</label>
-              <input
-                type="text"
-                id="name"
-                placeholder="Jane Doe"
-                onChange={handleInputChange}
-                value={currentUser.name}
-              />
-              <label>Email</label>
-              <input
-                type="text"
-                id="email"
-                placeholder="jane.doe@gmail.com"
-                onChange={handleInputChange}
-                value={currentUser.email}
-              />
-              <input type="submit" value="Edit" />
-            </form>
+            <EditUserForm
+              submitUserEdit={submitUserEdit}
+              handleInputChange={handleInputChange}
+              currentUser={currentUser}
+            />
           </div>
           :
           <div className="flex-large">
