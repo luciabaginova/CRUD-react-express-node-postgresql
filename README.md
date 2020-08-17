@@ -1,5 +1,3 @@
-# CRUD-react-express-node-postgresql
-
 This simple web application showcases the ability to create, read, update, and delete data.
 
 ![Cover](./pic/cover.png)
