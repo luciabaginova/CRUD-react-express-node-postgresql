@@ -13,7 +13,7 @@ const App = () => {
   const [users, setUsers] = useState([])
   const [currentUser, setCurrentUser] = useState(initialFormState)
   const [editing, setEditing] = useState(false)
-  const fetchurl = process.env.DEV == false ? 'https://pa200hw2paasweb.azurewebsites.net' : `http://localhost:8080`
+  const fetchurl = process.env.DEV === false ? 'https://pa200hw2paasweb.azurewebsites.net' : `http://localhost:8080`
 
   useEffect(() => {
     fetchUsers();
