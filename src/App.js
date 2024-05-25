@@ -13,13 +13,14 @@ const App = () => {
   const [users, setUsers] = useState([])
   const [currentUser, setCurrentUser] = useState(initialFormState)
   const [editing, setEditing] = useState(false)
+  const fetchurl = process.env.DEV == false ? 'https://pa200hw2paasweb.azurewebsites.net' : `http://localhost:8080`
 
   useEffect(() => {
     fetchUsers();
   }, [])
 
   const fetchUsers = async () => {
-    const result = await fetch(`http://localhost:8080/users`)
+      const result = await fetch(`${fetchurl}/users`)
     result
       .json()
       .then(result => setUsers(result))
@@ -34,7 +35,7 @@ const App = () => {
   const submitNewUser = async (event) => {
     event.preventDefault()
 
-    const response = await fetch('http://localhost:8080/users', {
+      const response = await fetch('${fetchurl}/users', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -51,7 +52,7 @@ const App = () => {
   }
 
   const deleteUser = async (item) => {
-    const response = await fetch(`http://localhost:8080/users/${item.id}`, {
+      const response = await fetch(`${fetchurl}/users/${item.id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -72,7 +73,7 @@ const App = () => {
   const submitUserEdit = async (event) => {
     event.preventDefault()
 
-    const response = await fetch(`http://localhost:8080/users/${currentUser.id}`, {
+      const response = await fetch(`${fetchurl}/users/${currentUser.id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
