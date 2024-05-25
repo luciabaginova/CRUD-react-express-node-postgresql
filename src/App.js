@@ -21,7 +21,7 @@ const App = () => {
       .json()
       .then(result => setUsers(result))
       .catch(e => console.log(e))
-  }, [])
+  }, [fetchurl])
 
     useEffect(() => {
         fetchUsers();
