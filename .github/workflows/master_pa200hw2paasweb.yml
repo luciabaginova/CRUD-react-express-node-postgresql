@@ -34,7 +34,7 @@ jobs:
           AZURE_STORAGE_ACCOUNT: ${{ secrets.AZURE_STORAGE_ACCOUNT }}
           AZURE_STORAGE_KEY: ${{ secrets.AZURE_STORAGE_KEY }}
         run: |
-          az storage blob upload-batch -d testconthw2 --account-name $AZURE_STORAGE_ACCOUNT --account-key $AZURE_STORAGE_KEY -s ./build/static
+          az storage blob upload-batch -d testconthw2 --account-name $AZURE_STORAGE_ACCOUNT --account-key $AZURE_STORAGE_KEY -s ./build
 
       - name: Update asset-manifest, precache-manifest, and index.html
         run: |
