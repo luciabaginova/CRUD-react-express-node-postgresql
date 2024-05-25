@@ -15,10 +15,6 @@ const App = () => {
   const [editing, setEditing] = useState(false)
   const fetchurl = process.env.DEV === false ? 'https://pa200hw2paasweb.azurewebsites.net' : `http://localhost:8080`
 
-  useEffect(() => {
-    fetchUsers();
-  }, [fetchUsers])
-
   const fetchUsers = useCallback(async () => {
       const result = await fetch(`${fetchurl}/users`)
     result
@@ -26,6 +22,10 @@ const App = () => {
       .then(result => setUsers(result))
       .catch(e => console.log(e))
   }, [])
+
+    useEffect(() => {
+        fetchUsers();
+    }, [fetchUsers])
 
   const handleInputChange = event => {
     const { id, value } = event.target
