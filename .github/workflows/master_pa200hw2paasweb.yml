@@ -1,6 +1,3 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
 name: Build and deploy Node.js app to Azure Web App - pa200HW2PaasWeb
 
 on:
@@ -27,11 +24,46 @@ jobs:
           npm run build --if-present
           npm run test --if-present
 
-      - name: Update asset links in index.html
+      - name: Install Azure CLI and jq
         run: |
-          sed -i 's|/static/css/main\..*\.css|https://astorageaccthw2.blob.core.windows.net/hw2container/main.css|g' ./build/index.html
-          sed -i 's|/static/js/2\..*\.chunk\.js|https://astorageaccthw2.blob.core.windows.net/hw2container/2.js|g' ./build/index.html
-          sed -i 's|/static/js/main\..*\.chunk\.js|https://astorageaccthw2.blob.core.windows.net/hw2container/main.js|g' ./build/index.html
+          curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+          sudo apt-get install -y jq
+
+      - name: Upload to Azure Blob Storage
+        env:
+          AZURE_STORAGE_ACCOUNT: ${{ secrets.AZURE_STORAGE_ACCOUNT }}
+          AZURE_STORAGE_KEY: ${{ secrets.AZURE_STORAGE_KEY }}
+        run: |
+          az storage blob upload-batch -d testconthw2 --account-name $AZURE_STORAGE_ACCOUNT --account-key $AZURE_STORAGE_KEY -s ./build/static
+
+      - name: Update asset-manifest, precache-manifest, and index.html
+        run: |
+          BLOB_URL="https://astorageaccthw2.blob.core.windows.net/testconthw2"
+          ASSET_MANIFEST="./build/asset-manifest.json"
+          INDEX_HTML="./build/index.html"
+          PRECACHE_MANIFEST=$(ls ./build/precache-manifest.*.js)
+
+          # Update asset-manifest.json
+          jq '.files |= map_values($BLOB_URL + .)' "$ASSET_MANIFEST" --arg BLOB_URL "$BLOB_URL" > temp.json
+          if [ -s temp.json ]; then
+            mv temp.json "$ASSET_MANIFEST"
+          else
+            echo "Failed to update asset-manifest.json"
+            exit 1
+          fi
+
+          # Update precache-manifest.js
+          if ! sed -i "s|\"url\": \"/static/|\"url\": \"${BLOB_URL}/static/|g" "$PRECACHE_MANIFEST"; then
+            echo "Failed to update precache-manifest.js"
+            exit 1
+          fi
+
+          # Update index.html
+          if ! sed -i "s|/static/js/|${BLOB_URL}/static/js/|g" "$INDEX_HTML" || ! sed -i "s|/static/css/|${BLOB_URL}/static/css/|g" "$INDEX_HTML"; then
+            echo "Failed to update index.html"
+            exit 1
+          fi
+
 
       - name: Zip artifact for deployment
         run: zip release.zip ./* -r
@@ -49,7 +81,7 @@ jobs:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
-      id-token: write #This is required for requesting the JWT
+      id-token: write
 
     steps:
       - name: Download artifact from build job
@@ -59,7 +91,7 @@ jobs:
 
       - name: Unzip artifact for deployment
         run: unzip release.zip
-      
+
       - name: Login to Azure
         uses: azure/login@v1
         with:
@@ -74,4 +106,3 @@ jobs:
           app-name: 'pa200HW2PaasWeb'
           slot-name: 'Production'
           package: .
-          
