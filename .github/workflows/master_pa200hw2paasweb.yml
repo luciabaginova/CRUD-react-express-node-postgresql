@@ -27,6 +27,12 @@ jobs:
           npm run build --if-present
           npm run test --if-present
 
+      - name: Update asset links in index.html
+        run: |
+          sed -i 's|/static/css/main\..*\.css|https://astorageaccthw2.blob.core.windows.net/hw2container/main.css|g' ./build/index.html
+          sed -i 's|/static/js/2\..*\.chunk\.js|https://astorageaccthw2.blob.core.windows.net/hw2container/2.js|g' ./build/index.html
+          sed -i 's|/static/js/main\..*\.chunk\.js|https://astorageaccthw2.blob.core.windows.net/hw2container/main.js|g' ./build/index.html
+
       - name: Zip artifact for deployment
         run: zip release.zip ./* -r
 
