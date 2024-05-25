@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import NewUserForm from './Components/NewUserForm';
 import EditUserForm from './Components/EditUserForm';
 
@@ -17,15 +17,15 @@ const App = () => {
 
   useEffect(() => {
     fetchUsers();
-  }, [])
+  }, [fetchUsers])
 
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
       const result = await fetch(`${fetchurl}/users`)
     result
       .json()
       .then(result => setUsers(result))
       .catch(e => console.log(e))
-  }
+  }, [])
 
   const handleInputChange = event => {
     const { id, value } = event.target
@@ -35,7 +35,7 @@ const App = () => {
   const submitNewUser = async (event) => {
     event.preventDefault()
 
-      const response = await fetch('${fetchurl}/users', {
+      const response = await fetch(`${fetchurl}/users`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
