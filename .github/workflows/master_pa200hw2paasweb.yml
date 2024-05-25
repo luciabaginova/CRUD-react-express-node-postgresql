@@ -34,7 +34,19 @@ jobs:
           AZURE_STORAGE_ACCOUNT: ${{ secrets.AZURE_STORAGE_ACCOUNT }}
           AZURE_STORAGE_KEY: ${{ secrets.AZURE_STORAGE_KEY }}
         run: |
-          az storage blob upload-batch -d testconthw2 --account-name $AZURE_STORAGE_ACCOUNT --account-key $AZURE_STORAGE_KEY -s ./build
+          az storage blob upload-batch -d testconthw2 --account-name $AZURE_STORAGE_ACCOUNT --account-key $AZURE_STORAGE_KEY -s ./build --overwrite
+      
+      - name: Delete local static directory
+        run: rm -rf ./build/static
+        
+      - name: Delete react app
+        run: rm -rf ./src 
+      
+      - name: Delete public directory
+        run: rm -rf ./public 
+
+      - name: Delete pic directory
+        run: rm -rf ./pic 
 
       - name: Update asset-manifest, precache-manifest, and index.html
         run: |
