@@ -1,28 +1,21 @@
 require('dotenv').config()
 const Pool = require('pg').Pool
-const { DefaultAzureCredential } = require('@azure/identity');
-
-const credential = new DefaultAzureCredential();
 const pool = new Pool({
-    //user: `${process.env.DB_USER}`,
+    // user: `${process.env.DB_USER}`,
     host: `${process.env.DB_HOST}`,
     database: `${process.env.DB_DATABASE}`,
-    //password: `${process.env.DB_PASSWORD}`,
+    // password: `${process.env.DB_PASSWORD}`,
     port: `${process.env.DB_PORT}`,
     ssl: {
         rejectUnauthorized: false
     },
-    connectionTimeoutMillis: 50000,
     authentication: {
-        type: 'azure-active-directory-default',
-        options: {
-            credential: credential,
-        },
-    },
+        type: 'azure-active-directory-default'
+    }
 })
 
-// Our first endpoint will be a GET request. 
-// Inside the pool.query() we can put the raw SQL that will touch the api database. 
+// Our first endpoint will be a GET request.
+// Inside the pool.query() we can put the raw SQL that will touch the api database.
 // We’ll SELECT all users and order by id.
 
 const getUsers = (request, response) => {
